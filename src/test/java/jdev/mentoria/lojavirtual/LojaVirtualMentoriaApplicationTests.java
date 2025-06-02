@@ -40,7 +40,7 @@ class LojaVirtualMentoriaApplicationTests extends TestCase {
 			
 			Acesso acesso = new Acesso();
 			
-			acesso.setDescricao("ROLE_TEST_MOCKITO_SYSTEM");
+			acesso.setDescricao("ROLE_TEST_CRIAR_CADASTRO_MOCKITO");
 			
 			ObjectMapper objectMapper = new ObjectMapper();
 			
@@ -58,6 +58,37 @@ class LojaVirtualMentoriaApplicationTests extends TestCase {
 					.readValue(retornoApi.andReturn().getResponse().getContentAsString(), Acesso.class);
 			
 			assertEquals(acesso.getDescricao(), objetoRetorno.getDescricao());
+		}
+		
+		
+		
+		
+		/* Teste de deletar com Mockito */
+		@Test
+		public void testRestApiDeleteAcesso() throws JsonProcessingException, Exception {
+			DefaultMockMvcBuilder builder = MockMvcBuilders.webAppContextSetup(this.wac);
+			MockMvc mockMvc = builder.build();
+			
+			Acesso acesso = new Acesso();
+			
+			acesso.setDescricao("ROLE_TEST_DELETE_ACESSO");
+			
+			acesso = acessoRepository.save(acesso);
+			
+			ObjectMapper objectMapper = new ObjectMapper();
+			
+			ResultActions retornoApi = mockMvc
+					.perform(MockMvcRequestBuilders.post("/deleteAcesso")
+					.content(objectMapper.writeValueAsString(acesso))
+					.accept(org.springframework.http.MediaType.APPLICATION_JSON)
+					.contentType(org.springframework.http.MediaType.APPLICATION_JSON));
+			
+			System.out.println("Retorno da API: " + retornoApi.andReturn().getResponse().getContentAsString());
+			System.out.println("Status de retorno da API: " + retornoApi.andReturn().getResponse().getStatus());
+			
+			assertEquals("Acesso Removido", retornoApi.andReturn().getResponse().getContentAsString());
+			assertEquals(200, retornoApi.andReturn().getResponse().getStatus());
+			
 		}
 
 }
