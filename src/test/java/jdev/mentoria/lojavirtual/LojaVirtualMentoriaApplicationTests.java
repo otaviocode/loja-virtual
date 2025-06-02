@@ -50,12 +50,15 @@ class LojaVirtualMentoriaApplicationTests extends TestCase {
 					.accept(org.springframework.http.MediaType.APPLICATION_JSON)
 					.contentType(org.springframework.http.MediaType.APPLICATION_JSON));
 			
+			System.out.println("Descricao: " + acesso.getDescricao());
 			System.out.println("Retorno da API: " + retornoApi.andReturn().getResponse().getContentAsString());
 			
 			/*Conveter o retorno da API para um objeto de acesso*/
 			
 			Acesso objetoRetorno = objectMapper
 					.readValue(retornoApi.andReturn().getResponse().getContentAsString(), Acesso.class);
+			
+			/* Alguns testes com JUnit: */
 			
 			assertEquals(acesso.getDescricao(), objetoRetorno.getDescricao());
 		}
@@ -83,8 +86,44 @@ class LojaVirtualMentoriaApplicationTests extends TestCase {
 					.accept(org.springframework.http.MediaType.APPLICATION_JSON)
 					.contentType(org.springframework.http.MediaType.APPLICATION_JSON));
 			
+			System.out.println("Descricao: " + acesso.getDescricao());
 			System.out.println("Retorno da API: " + retornoApi.andReturn().getResponse().getContentAsString());
 			System.out.println("Status de retorno da API: " + retornoApi.andReturn().getResponse().getStatus());
+			
+			/* Alguns testes com JUnit: */
+			
+			assertEquals("Acesso Removido", retornoApi.andReturn().getResponse().getContentAsString());
+			assertEquals(200, retornoApi.andReturn().getResponse().getStatus());
+			
+		}
+		
+		
+		
+		/* Teste de deletar pelo id com Mockito */
+		@Test
+		public void testRestoApiDeletePorIDAcesso() throws JsonProcessingException, Exception {
+			DefaultMockMvcBuilder builder = MockMvcBuilders.webAppContextSetup(this.wac);
+			MockMvc mockMvc = builder.build();
+			
+			Acesso acesso = new Acesso();
+			
+			acesso.setDescricao("ROLE_TESTE_DELETE_ID");
+			
+			acesso = acessoRepository.save(acesso);
+			
+			ObjectMapper objectMapper = new ObjectMapper();
+			
+			ResultActions retornoApi = mockMvc
+					.perform(MockMvcRequestBuilders.delete("/deleteAcessoPorId/" + acesso.getId())
+					.content(objectMapper.writeValueAsString(acesso))
+					.accept(org.springframework.http.MediaType.APPLICATION_JSON)
+					.contentType(org.springframework.http.MediaType.APPLICATION_JSON));
+			
+			System.out.println("Descricao: " + acesso.getDescricao());
+			System.out.println("Retorno da API: " + retornoApi.andReturn().getResponse().getContentAsString());
+			System.out.println("Status de Retorno da API: " + retornoApi.andReturn().getResponse().getStatus());
+			
+			/* Alguns testes com JUnit: */
 			
 			assertEquals("Acesso Removido", retornoApi.andReturn().getResponse().getContentAsString());
 			assertEquals(200, retornoApi.andReturn().getResponse().getStatus());
