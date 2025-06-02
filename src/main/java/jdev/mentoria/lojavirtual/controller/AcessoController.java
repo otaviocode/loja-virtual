@@ -53,7 +53,7 @@ public class AcessoController {
 	
 	
 	
-	/* Deletar um acesso por ID: */
+	/*  Deletar um acesso por ID:  */
 
 	@ResponseBody /* Poder dar um retorno da API */
 	@DeleteMapping(value = "**/deleteAcessoPorId/{id}")
