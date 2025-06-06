@@ -17,7 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @SequenceGenerator(name = "seq_pessoa", sequenceName = "seq_pessoa", initialValue = 1, allocationSize = 1)
 public abstract class Pessoa implements Serializable {
 
@@ -35,7 +35,7 @@ public abstract class Pessoa implements Serializable {
 
 	@Column(nullable = false)
 	private String telefone;
-	
+
 	@Column
 	private String tipoPessoa;
 
@@ -49,11 +49,11 @@ public abstract class Pessoa implements Serializable {
 	public List<Endereco> getEnderecos() {
 		return enderecos;
 	}
-	
+
 	public void setTipoPessoa(String tipoPessoa) {
 		this.tipoPessoa = tipoPessoa;
 	}
-	
+
 	public String getTipoPessoa() {
 		return tipoPessoa;
 	}
